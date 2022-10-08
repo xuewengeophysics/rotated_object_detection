@@ -6,7 +6,7 @@ I have tested the following versions of OS and softwares：
 * Python 3.9.13
 * PyTorch: 1.10.1+cu113
 
-## Install (Please refer to this [github](https://github.com/hukaixuan19970627/yolov5_obb))
+## Install (Please refer to this github [yolov5_obb](https://github.com/hukaixuan19970627/yolov5_obb))
 **CUDA Driver Version ≥ CUDA Toolkit Version(runtime version) = torch.version.cuda**
 
 a. Create a conda virtual environment and activate it, e.g.,
