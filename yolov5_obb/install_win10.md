@@ -75,3 +75,14 @@ Processing dependencies for nms-rotated==0.0.0
 Finished processing dependencies for nms-rotated==0.0.0
 ```
 
+i. Debug "cl.exe" error (Please refer to this [issue](https://github.com/hukaixuan19970627/yolov5_obb/issues/440)) and Recompile
+
++ both vs2015 and vs2019 are ok
+
+```
+用于 x86 的 Microsoft (R) C/C++ 优化编译器 19.00.24215.1 版
+版权所有(C) Microsoft Corporation。保留所有权利。
+
+用法: cl [ 选项... ] 文件名... [ /link 链接选项... ]
+```
+
