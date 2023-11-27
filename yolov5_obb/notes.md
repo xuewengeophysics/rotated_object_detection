@@ -12,7 +12,13 @@ Make sure the labels format is [poly classname diffcult], e.g., You can set **di
 
 https://github.com/Acid-knight/Annotations_Tool.git
 
-使用上述工具将将rolabelImg格式(cx,cy,w,h,θ)转化为DOTA数据集的txt格式
+使用上述工具将rolabelImg格式(cx,cy,w,h,θ)转化为DOTA数据集的txt格式
+
+
+
+https://github.com/hukaixuan19970627/DOTA_devkit_YOLO
+
+使用上述工具查看转换的数据时候正确
 
 
 
