@@ -64,20 +64,24 @@ def poly2rbox(polys, num_cls_thata=180, radius=6.0, use_pi=False, use_gaussian=F
 
         #wx After OpenCV4.5.1, the range of angle is (0, 90]
         (x, y), (w, h), angle = cv2.minAreaRect(poly) # θ ∈ [0， 90]
-        set_trace()
+        # set_trace()
 
-        #wx
-        angle = -angle # θ ∈ [-90， 0]
+        # wx认为有误，注释掉
+        # angle = -angle # θ ∈ [-90， 0]
         theta = angle / 180 * pi # 转为pi制
 
         # trans opencv format to longedge format θ ∈ [-pi/2， pi/2]
         if w != max(w, h): 
             w, h = h, w
-            theta += pi/2
+            # wx认为有误，注释掉
+            # theta += pi/2
+            # 替换为
+            theta -= pi/2
+
         theta = regular_theta(theta) # limit theta ∈ [-pi/2, pi/2)
         angle = (theta * 180 / pi) + 90 # θ ∈ [0， 180)
 
-        set_trace()
+        # set_trace()
 
         if not use_pi: # 采用angle弧度制 θ ∈ [0， 180)
             rboxes.append([x, y, w, h, angle])
@@ -125,15 +129,25 @@ def rbox2poly(obboxes):
     if isinstance(obboxes, torch.Tensor):
         center, w, h, theta = obboxes[:, :2], obboxes[:, 2:3], obboxes[:, 3:4], obboxes[:, 4:5]
         Cos, Sin = torch.cos(theta), torch.sin(theta)
-
+        #org
+        # vector1 = torch.cat(
+        #     (w/2 * Cos, -w/2 * Sin), dim=-1)
+        # vector2 = torch.cat(
+        #     (-h/2 * Sin, -h/2 * Cos), dim=-1)
+        # point1 = center + vector1 + vector2
+        # point2 = center + vector1 - vector2
+        # point3 = center - vector1 - vector2
+        # point4 = center - vector1 + vector2
+        #wx
         vector1 = torch.cat(
-            (w/2 * Cos, -w/2 * Sin), dim=-1)
+            (-w/2 * Cos, -w/2 * Sin), dim=-1)
         vector2 = torch.cat(
-            (-h/2 * Sin, -h/2 * Cos), dim=-1)
+            (h/2 * Sin, -h/2 * Cos), dim=-1)
         point1 = center + vector1 + vector2
-        point2 = center + vector1 - vector2
+        point2 = center - vector1 + vector2
         point3 = center - vector1 - vector2
-        point4 = center - vector1 + vector2
+        point4 = center + vector1 - vector2
+
         order = obboxes.shape[:-1]
         return torch.cat(
             (point1, point2, point3, point4), dim=-1).reshape(*order, 8)
@@ -222,10 +236,10 @@ if __name__ == '__main__':
 
     #wx 5+ cx = 1.116, cy = 0.933, w = 2.0, h = 1.0, angle = 30.0
     #wx LE cx = 1.116, cy = 0.933, w = 2.0, h = 1.0, angle = 120.0, theta = pi / 6
-    polys = np.array([[0.5, 0, 2.232, 1, 1.732, 1.866, 0, 0.866]])
+    # polys = np.array([[0.5, 0, 2.232, 1, 1.732, 1.866, 0, 0.866]])
 
     #wx 5+ cx = 1.116, cy = 0.933, w = 1.0, h = 2.0, angle = 60.0
     #wx LE cx = 1.116, cy = 0.933, w = 2.0, h = 1.0, angle = 60.0, theta = -pi / 6
-    # polys = np.array([[1.732, 0, 2.232, 0.866, 0.5, 1.866, 0, 1]])
+    polys = np.array([[1.732, 0, 2.232, 0.866, 0.5, 1.866, 0, 1]])
 
     poly2rbox(polys, num_cls_thata=180, radius=6.0, use_pi=True, use_gaussian=True)
